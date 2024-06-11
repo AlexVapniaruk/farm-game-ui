@@ -23,6 +23,7 @@ import axios from 'axios';
 axios.get('/env')
     .then(response => {
         const envVariables = response.data;
+        console.log(envVariables)
         //@ts-ignore
         window.__env__ = envVariables; // Set environment variables on window object
         app.use(router).mount('#app') // Initialize Vue app after environment variables are set
