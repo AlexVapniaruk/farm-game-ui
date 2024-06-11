@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import EnterName from "@/components/enter-name/EnterName.vue";
 import { reactive, onMounted } from 'vue';
-import * as process from "process";
 
 const state = reactive({
   hasName: false,
