@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import 'vuetify/dist/vuetify.min.css' // Ensure you are importing Vuetify CSS
+import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import * as components from 'vuetify/components'
@@ -20,8 +20,10 @@ app.use(vuetify)
 
 import axios from 'axios';
 
+console.log('/env before')
 axios.get('/env')
     .then(response => {
+        console.log('response /env')
         const envVariables = response.data;
         console.log(envVariables)
         //@ts-ignore
