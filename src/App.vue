@@ -33,8 +33,6 @@ const saveNameHandler = () => {
   isPlayerId();
   isPlayerName();
 }
-
-console.log(process.env.VITE_API_BASE_URL)
 </script>
 
 <template>
