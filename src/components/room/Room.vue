@@ -6,7 +6,7 @@ import {getRoom} from "@/api-sdk/room.ts";
 import { useRoute } from 'vue-router'
 import socket from "@/api-sdk/sockets.ts";
 import {cloneDeep} from "lodash";
-import {gameStatuses} from "@/api-sdk/game.ts";
+import {gameStatuses, GameState} from "@/api-sdk/game.ts";
 const route = useRoute();
 
 interface Player {
@@ -16,7 +16,7 @@ interface Player {
   host:boolean
 }
 
-const roomId = route.params.id;
+const roomId = route.params.id as string;
 const playerId = localStorage.getItem('playerId');
 const playerName = localStorage.getItem('playerName');
 
@@ -36,7 +36,7 @@ onMounted(async () => {
   window.addEventListener('beforeunload', handleBeforeUnload);
 });
 
-const updateGame = (game) => {
+const updateGame = (game:GameState) => {
   if(game?.status === gameStatuses.running && game.players) {
     state.players = state.players.map(player => {
       const playerFound = game.players.find(gamePlayer => {
