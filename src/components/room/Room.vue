@@ -6,7 +6,7 @@ import {getRoom} from "@/api-sdk/room.ts";
 import { useRoute } from 'vue-router'
 import socket from "@/api-sdk/sockets.ts";
 import {cloneDeep} from "lodash";
-import {gameStatuses, GameState} from "@/api-sdk/game.ts";
+import {gameStatuses, GameState, Farm} from "@/api-sdk/game.ts";
 const route = useRoute();
 
 interface Player {
@@ -16,14 +16,22 @@ interface Player {
   host:boolean
 }
 
-const roomId = route.params.id as string;
-const playerId = localStorage.getItem('playerId');
-const playerName = localStorage.getItem('playerName');
+// Define the type for your custom event data
 
-const state = reactive({
+const roomId = route.params.id as string;
+const playerId = localStorage.getItem('playerId') as string;
+const playerName = localStorage.getItem('playerName') as string;
+
+interface State {
+  hostId: number;
+  players: Player[];
+  game: GameState | null
+}
+
+const state = reactive<State>({
   hostId: 0,
   players: [],
-  game: {}
+  game: null
 });
 
 onMounted(async () => {
@@ -70,7 +78,7 @@ const animalPoints = {
   horse: 72,
 };
 
-const calculatePoint = (farm) => {
+const calculatePoint = (farm:Farm) => {
   return (farm.rabbits * animalPoints.rabbit)
       + (farm.sheep * animalPoints.sheep)
       + (farm.pigs * animalPoints.pig)
@@ -91,7 +99,9 @@ const updatePlayers = async (roomId:string) => {
 };
 
 onUnmounted(() => {
-  socket.off('disconnect', { playerId, playerName, online: false });
+  const eventData = { playerId, playerName, online: false };
+  // @ts-ignore
+  socket.off('disconnect', eventData);
 });
 
 const handleBeforeUnload = () => {

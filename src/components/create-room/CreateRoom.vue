@@ -3,7 +3,7 @@ import {createRoom} from "@/api-sdk/room.ts";
 import { useRouter } from 'vue-router'
 
 const router = useRouter();
-const playerId = localStorage.getItem('playerId');
+const playerId = localStorage.getItem('playerId') as string;
 const createRoomHandler = async () => {
   const { data } = await createRoom(playerId);
 

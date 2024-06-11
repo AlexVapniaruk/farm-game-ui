@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import socket from "@/api-sdk/sockets.ts";
 import {onMounted, reactive, watch} from "vue";
+import {GamePlayer} from "@/api-sdk/game.ts";
+
 
 const props = defineProps(['game']);
 const playerId = localStorage.getItem('playerId');
-let playing = props.game.players.find(player => player.id === props.game.playingId);
-let winner = props.game.players.find(player => player.id === props.game.winnerId);
+let playing = props.game.players.find((player:GamePlayer) => player.id === props.game.playingId);
+let winner = props.game.players.find((player:GamePlayer) => player.id === props.game.winnerId);
 
 const state = reactive({
   isRotating: false
 })
 
 watch(() => props.game, () => {
-  playing = props.game.players.find(player => player.id === props.game.playingId)
-  winner = props.game.players.find(player => player.id === props.game.winnerId)
+  playing = props.game.players.find((player:GamePlayer) => player.id === props.game.playingId)
+  winner = props.game.players.find((player:GamePlayer) => player.id === props.game.winnerId)
 });
 
 enum animals {
@@ -52,7 +54,7 @@ const playCubes = () => {
   socket.emit('playCubes', {})
 };
 
-const buyAnimal = (animalKey) => {
+const buyAnimal = (animalKey:number) => {
   socket.emit('buyAnimal', { animalKey })
 };
 

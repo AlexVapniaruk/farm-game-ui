@@ -9,7 +9,7 @@ export enum gameStatuses {
     finished
 }
 
-interface Farm {
+export interface Farm {
     rabbits: number;
     sheep: number;
     pigs: number;
@@ -19,7 +19,7 @@ interface Farm {
     dogLevel2: boolean;
 }
 
-interface GamePlayer extends Player {
+export interface GamePlayer extends Player {
     farm: Farm
 }
 
