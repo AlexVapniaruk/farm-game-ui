@@ -8,6 +8,7 @@ import router from "./router.ts";
 import './style.css'
 import App from './App.vue'
 import { createVuetify } from 'vuetify'
+import axios from 'axios';
 
 const app = createApp(App)
 
@@ -16,9 +17,7 @@ const vuetify = createVuetify({
     directives
 })
 
-app.use(vuetify)
-
-import axios from 'axios';
+app.use(vuetify);
 
 console.log('/env before')
 axios.get('/env')
