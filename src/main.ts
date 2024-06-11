@@ -33,3 +33,23 @@ axios.get('/env')
         console.error('Error fetching environment variables:', error);
         // Handle error if needed
     });
+
+async function initApp() {
+    try {
+        const response = await axios.get('/env');
+        const envVariables = response.data;
+        console.log('response /env');
+        console.log(envVariables);
+        //@ts-ignore
+        window.__env__ = envVariables; // Set environment variables on window object
+        const app = createApp(App)
+        app.use(vuetify);
+        app.use(router).mount('#app');
+    } catch (error) {
+        console.error('Error fetching environment variables:', error);
+        // Handle error if needed, e.g., show an error message to the user
+    }
+}
+
+// Call the function to initialize the app
+initApp();
