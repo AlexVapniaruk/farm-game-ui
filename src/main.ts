@@ -1,3 +1,4 @@
+console.log('app start');
 import { createApp } from 'vue'
 import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
