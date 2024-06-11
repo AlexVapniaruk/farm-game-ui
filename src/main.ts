@@ -9,15 +9,12 @@ import './style.css'
 import App from './App.vue'
 import { createVuetify } from 'vuetify'
 import axios from 'axios';
-console.log('start');
-const app = createApp(App)
+console.log('start')
 
 const vuetify = createVuetify({
     components,
     directives
 })
-
-app.use(vuetify);
 
 console.log('/env before')
 axios.get('/env')
@@ -27,6 +24,8 @@ axios.get('/env')
         console.log(envVariables)
         //@ts-ignore
         window.__env__ = envVariables; // Set environment variables on window object
+        const app = createApp(App)
+        app.use(vuetify);
         app.use(router).mount('#app') // Initialize Vue app after environment variables are set
     })
     .catch(error => {
