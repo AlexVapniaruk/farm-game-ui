@@ -9,7 +9,7 @@ import './style.css'
 import App from './App.vue'
 import { createVuetify } from 'vuetify'
 import axios from 'axios';
-
+console.log('start');
 const app = createApp(App)
 
 const vuetify = createVuetify({

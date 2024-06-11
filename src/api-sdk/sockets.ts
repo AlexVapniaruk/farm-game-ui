@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 //@ts-ignore
-console.log(window.__env__)
+console.log(window.__env__);
 //@ts-ignore
 const socket = io(window.__env__.API_URL || 'http://localhost:3000');
 
