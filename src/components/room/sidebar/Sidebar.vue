@@ -2,16 +2,10 @@
 import PlayerList from "@/components/room/sidebar/PlayerList.vue";
 
 const props = defineProps(['players']);
-
 </script>
 
 <template>
-<div>
-  <div>
-    Game:
-    <div>Score: 1</div>
-  </div>
-
+<div class="sidebar">
   <div>
     <PlayerList :players="props.players"/>
   </div>
@@ -19,5 +13,7 @@ const props = defineProps(['players']);
 </template>
 
 <style scoped>
-
+.sidebar {
+  padding: 16px;
+}
 </style>

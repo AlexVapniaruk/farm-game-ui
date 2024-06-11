@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import socket from "@/api-sdk/sockets.ts";
-import {reactive, watch} from "vue";
+import {onMounted, reactive, watch} from "vue";
 
 const props = defineProps(['game']);
 const playerId = localStorage.getItem('playerId');
 let playing = props.game.players.find(player => player.id === props.game.playingId);
+let winner = props.game.players.find(player => player.id === props.game.winnerId);
 
 const state = reactive({
   isRotating: false
@@ -12,6 +13,7 @@ const state = reactive({
 
 watch(() => props.game, () => {
   playing = props.game.players.find(player => player.id === props.game.playingId)
+  winner = props.game.players.find(player => player.id === props.game.winnerId)
 });
 
 enum animals {
@@ -21,16 +23,22 @@ enum animals {
   cow,
   horse,
   dogLevel1,
-  dogLevel2
+  dogLevel2,
+  fox,
+  wolf
 };
 
 const redCubeList = [
-  'rabbit', 'sheep', 'pig', 'horse', 'fox'
+  'rabbit', 'sheep', 'pig', 0, 'horse', 0, 0, 'fox', 0
 ];
 
 const blueCubeList = [
-  'rabbit', 'sheep', 'pig', 'cow', 'wolf'
+  'rabbit', 'sheep', 'pig', 'cow', 0, 0, 0, 0, 'wolf'
 ];
+
+onMounted(async () => {
+  socket.on('playCubesAnimation', () => startRotation());
+});
 
 const startRotation = () => {
   state.isRotating = true;
@@ -47,13 +55,23 @@ const playCubes = () => {
 const buyAnimal = (animalKey) => {
   socket.emit('buyAnimal', { animalKey })
 };
+
+const endMove = () => {
+  socket.emit('endMove', {})
+};
 </script>
 
 <template>
-<div>
+<div class="game-in-progress">
+  <div>
   <div class="player-move">
-    <div v-if="playing.id !== playerId">Виконує хід: {{ playing.name }}</div>
-    <div v-else>Ваш хід</div>
+    <div v-if="!game.winnerId">
+      <div v-if="playing.id !== playerId">Виконує хід: {{ playing.name }}</div>
+      <div v-else>Ваш хід</div>
+    </div>
+    <div v-else>
+      Переміг {{ winner.name}}!!!
+    </div>
   </div>
   <div class="cubes">
     <div>
@@ -65,9 +83,10 @@ const buyAnimal = (animalKey) => {
           <img width="60" height="60" :src="`/src/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
         </div>
       </div>
-      <div v-if="playing.id === playerId" class="controls">
+      <div v-if="!winner && playing.id === playerId" class="controls">
         <div class="buttons-list">
           <v-btn
+              class="drop-cubes-button"
               color="secondary"
               :disabled="props.game.cubesPlayed"
               @click="playCubes"
@@ -75,20 +94,17 @@ const buyAnimal = (animalKey) => {
             Кинути кубіки
           </v-btn>
           <v-btn
-              :disabled="playing.farm.sheep === 0"
+              :disabled="playing.farm.dogLevel1 || game.dogLevel1bought === 4 || playing.farm.sheep === 0"
               @click="() => buyAnimal(animals.dogLevel1)"
           >
             Купити дворнягу
           </v-btn>
           <v-btn
-              :disabled="playing.farm.cows === 0"
+              :disabled="playing.farm.dogLevel2 || game.dogLevel2bought === 2 || playing.farm.cows === 0"
               @click="() => buyAnimal(animals.dogLevel2)"
           >
             Купити вовкодава
           </v-btn>
-          <v-btn color="error" :disabled="props.game.cubesPlayed">Завершити хід</v-btn>
-        </div>
-        <div class="buttons-list">
           <v-btn
               :disabled="playing.farm.rabbits < 6"
               @click="() => buyAnimal(animals.sheep)"
@@ -113,12 +129,105 @@ const buyAnimal = (animalKey) => {
           >
             Купити коня
           </v-btn>
+          <v-btn
+              color="error"
+              :disabled="!props.game.cubesPlayed"
+              @click="() => endMove()"
+          >
+            Завершити хід
+          </v-btn>
         </div>
       </div>
     </div>
   </div>
-  <div>
+  </div>
+  <div class="animal-board">
+    <div class="exchange">
+      <div class="exchange-row">
+        <div>6</div>
+        <div>
+        <img src="@/assets/img/rabbit.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/sheep.png">
+        </div>
+      </div>
+      <div class="exchange-row">
+        <div>2</div>
+        <div>
+          <img src="@/assets/img/sheep.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/pig.png">
+        </div>
+      </div>
+      <div class="exchange-row">
+        <div>3</div>
+        <div>
+          <img src="@/assets/img/pig.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/cow.png">
+        </div>
+      </div>
+      <div class="exchange-row">
+        <div>2</div>
+        <div>
+          <img src="@/assets/img/cow.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/horse.png">
+        </div>
+      </div>
+    </div>
+    <div class="exchange exchange-dog">
+      <div class="exchange-row">
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/sheep.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/doglevel1.png">
+        </div>
+      </div>
+      <div class="exchange-row">
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/cow.png">
+        </div>
+        <div>
+          =
+        </div>
+        <div>1</div>
+        <div>
+          <img src="@/assets/img/doglevel2.png">
+        </div>
+      </div>
+    </div>
     <div class="animal-list">
+      <div v-if="playing.farm.dogLevel1" class="dog">
+        <img src="@/assets/img/doglevel1.png"/>
+      </div>
       <div class="animal-count" v-if="playing.farm.rabbits > 5">{{ playing.farm.rabbits }}</div>
       <div v-for="n in 5" class="animal">
         <img v-if="n <= playing.farm.rabbits" src="@/assets/img/rabbit.png" class="animal rabbit no-filter"/>
@@ -126,24 +235,31 @@ const buyAnimal = (animalKey) => {
       </div>
     </div>
     <div class="animal-list">
+      <div v-if="playing.farm.dogLevel2" class="dog">
+        <img src="@/assets/img/doglevel2.png"/>
+      </div>
+      <div class="animal-count" v-if="playing.farm.sheep > 4">{{ playing.farm.sheep }}</div>
       <div v-for="n in 4" class="animal">
         <img v-if="n <= playing.farm.sheep" src="@/assets/img/sheep.png" class="animal sheep no-filter"/>
         <div v-else class="animal sheep hue-filter"/>
       </div>
     </div>
     <div class="animal-list">
+      <div class="animal-count" v-if="playing.farm.pigs > 3">{{ playing.farm.pigs }}</div>
       <div v-for="n in 3" class="animal">
         <img v-if="n <= playing.farm.pigs" src="@/assets/img/pig.png" class="animal pig no-filter"/>
         <div v-else class="animal pig hue-filter"/>
       </div>
     </div>
     <div class="animal-list">
+      <div class="animal-count" v-if="playing.farm.cows > 2">{{ playing.farm.cows }}</div>
       <div v-for="n in 2" class="animal">
         <img v-if="n <= playing.farm.cows" src="@/assets/img/cow.png" class="animal cow no-filter"/>
         <div v-else class="animal cow hue-filter"/>
       </div>
     </div>
     <div class="animal-list">
+      <div class="animal-count" v-if="playing.farm.horses > 1">{{ playing.farm.horses }}</div>
       <div v-for="n in 1" class="animal">
         <img v-if="n <= playing.farm.horses" src="@/assets/img/horse.png" class="animal horse no-filter"/>
         <div v-else class="animal horse hue-filter"/>
@@ -162,11 +278,59 @@ const buyAnimal = (animalKey) => {
 </template>
 
 <style scoped lang="scss">
+.game-in-progress {
+  display: flex;
+}
+
 .player-move {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  padding: 16px;
+  background: lightgoldenrodyellow;
+  border-radius: 8px;
+  width: 350px;
+  margin: 0 auto 20px;
+}
+
+.animal-board {
+  flex-grow: 1;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.exchange {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 40px;
+  background: lightgray;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.exchange-dog {
+  right: 0;
+  left: auto;
+}
+
+.exchange-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .animal-list {
@@ -176,6 +340,15 @@ const buyAnimal = (animalKey) => {
   position: relative;
 }
 
+.dog {
+  position: absolute;
+  right: -120px;
+
+  & img {
+    width: 125px;
+    height: 125px;
+  }
+}
 .cubes {
   display: flex;
   justify-content: center;
@@ -184,8 +357,8 @@ const buyAnimal = (animalKey) => {
 }
 
 .animal {
-  width: 100px;
-  height: 100px;
+  width: 125px;
+  height: 125px;
   border-radius: 50%;
   background-size: cover;
   background-position: center center;
@@ -200,6 +373,9 @@ const buyAnimal = (animalKey) => {
   justify-content: center;
 }
 
+.drop-cubes-button {
+  margin-bottom: 30px;
+}
 .cube {
   width: 150px;
   height: 150px;
@@ -247,6 +423,7 @@ const buyAnimal = (animalKey) => {
 
 .buttons-list {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: 8px;
   margin-top: 10px;

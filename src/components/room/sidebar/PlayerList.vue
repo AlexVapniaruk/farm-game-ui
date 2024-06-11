@@ -15,6 +15,13 @@ const currectPlayerId = localStorage.getItem('playerId')
   }">
       <div>{{ player.name }}</div>
       <div v-if="player.host">(host)</div>
+      <div v-if="player.farm">{{ player.points }}</div>
+      <div v-if="player.farm && player.farm.dogLevel1">
+        <img src="@/assets/img/doglevel1.png" width="40" height="40"/>
+      </div>
+      <div v-if="player.farm && player.farm.dogLevel2">
+        <img src="@/assets/img/doglevel2.png" width="40" height="40"/>
+      </div>
       <div
           class="player-list__player-status"
           :class="{

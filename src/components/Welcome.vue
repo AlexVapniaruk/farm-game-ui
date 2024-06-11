@@ -19,11 +19,12 @@ import CreateRoom from "@/components/create-room/CreateRoom.vue";
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
-  margin: 20vh auto;
+  width: 700px;
+  margin: 60vh auto 20vh;
   padding: 16px;
-  background: rgba(211, 211, 211, 0.90);
+  background: rgba(225, 169, 44, 0.9);
   border-radius: 8px;
+  border: 2px dashed black;
   height: 100vh;
 }
 </style>

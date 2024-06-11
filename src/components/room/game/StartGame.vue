@@ -4,7 +4,6 @@ import socket from "@/api-sdk/sockets.ts";
 const props = defineProps(['host', 'roomId']);
 
 const startHandler = () => {
-  console.log('startHandler');
   socket.emit('startGame', { roomId: props.roomId });
 };
 </script>
@@ -12,7 +11,7 @@ const startHandler = () => {
 <template>
   <div class="start-game">
     <div v-if="props.host">
-      <v-btn color="secondary" @click="startHandler">Почати гру</v-btn>
+      <v-btn class="start-button" color="secondary" width="500px" height="50px" @click="startHandler">Почати гру</v-btn>
     </div>
     <div v-else>
       Чекаємо... хост розпочне гру
@@ -26,9 +25,13 @@ const startHandler = () => {
   justify-content: center;
   align-items: center;
   max-width: 600px;
-  margin: 20vh auto;
+  height: 100vh;
   padding: 16px;
-  background: rgba(211, 211, 211, 0.90);
   border-radius: 8px;
+  margin: 0 auto;
+}
+
+.start-button {
+  font-size: 24px;
 }
 </style>

@@ -13,6 +13,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Lasco';
+  src: url('@/assets/fonts/Lasco_Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Lasco', sans-serif;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
