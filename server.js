@@ -14,35 +14,15 @@ const ENV_VARIABLES = {
 };
 
 //here we are configuring dist to serve app files
-app.use('/', (req, res, next) => {
-    res.locals.env = ENV_VARIABLES;
-    next();
-});
+app.use('/', serveStatic(path.join(__dirname, '/dist')))
 
+app.get('/env', (req, res) => {
+    res.json(ENV_VARIABLES);
+});
 // this * route is to serve project on different page routes except root `/`
 app.get(/.*/, function (req, res) {
-    // Inject environment variables into the HTML template
-    const html = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Your Vue App</title>
-      <script>
-        // Inject environment variables into window object
-        window.__env__ = ${JSON.stringify(ENV_VARIABLES)};
-      </script>
-    </head>
-    <body>
-      <div id="app"></div>
-      <script src="/app.js"></script>
-    </body>
-    </html>
-  `;
-    res.send(html);
-});
-
+    res.sendFile(path.join(__dirname, '/dist/index.html'))
+})
 
 const port = process.env.PORT || 8080
 app.listen(port)

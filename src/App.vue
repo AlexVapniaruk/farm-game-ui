@@ -7,9 +7,6 @@ const state = reactive({
 });
 
 onMounted(() => {
-  //@ts-ignore
-  const apiUrl = window.__env__.VITE_API_BASE_URL;
-  console.log(apiUrl); // Use the API URL as needed
   isPlayerName();
   isPlayerId();
 });
