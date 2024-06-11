@@ -4,8 +4,7 @@ let baseUrl;
 axios.get('/env')
     .then(response => {
         const envVariables = response.data;
-        console.log(envVariables, 'envVARIS')
-        baseUrl = envVariables.API_BASE_URL; // Assuming API_BASE_URL is one of the environment variables
+        baseUrl = envVariables.API_URL; // Assuming API_BASE_URL is one of the environment variables
     })
     .catch(error => {
         console.error('Error fetching environment variables:', error);
