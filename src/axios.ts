@@ -9,7 +9,12 @@ const instance = axios.create({
     //@ts-ignore
     baseURL: BASE_URL, // Use the retrieved base URL
     timeout: 1000,
-    headers: { 'X-Custom-Header': 'foobar' }
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*'
+    }
 });
 
 export default instance;
