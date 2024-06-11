@@ -4,6 +4,8 @@ import axios from 'axios';
 console.log(process.env.VITE_API_BASE_URL)
 //@ts-ignore
 console.log(process.env.API_BASE_URL)
+//@ts-ignore
+console.log(process.env)
 const instance = axios.create({
     //@ts-ignore
     baseURL: process.env.VITE_API_BASE_URL, // Access environment variable
