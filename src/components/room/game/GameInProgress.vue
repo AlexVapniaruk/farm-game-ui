@@ -2,7 +2,13 @@
 import socket from "@/api-sdk/sockets.ts";
 import {onMounted, reactive, watch} from "vue";
 import {GamePlayer} from "@/api-sdk/game.ts";
-
+import rabbitImage from '@/assets/img/cube/rabbit.png';
+import sheepImage from '@/assets/img/cube/sheep.png';
+import pigImage from '@/assets/img/cube/pig.png';
+import cowImage from '@/assets/img/cube/cow.png';
+import horseImage from '@/assets/img/cube/horse.png';
+import foxImage from '@/assets/img/cube/fox.png';
+import wolfImage from '@/assets/img/cube/wolf.png';
 
 const props = defineProps(['game']);
 const playerId = localStorage.getItem('playerId');
@@ -31,11 +37,11 @@ enum animals {
 };
 
 const redCubeList = [
-  'rabbit', 'sheep', 'pig', 0, 'horse', 0, 0, 'fox', 0
+  rabbitImage, sheepImage, pigImage, 0, horseImage, 0, 0, foxImage, 0
 ];
 
 const blueCubeList = [
-  'rabbit', 'sheep', 'pig', 'cow', 0, 0, 0, 0, 'wolf'
+  rabbitImage, sheepImage, pigImage, cowImage, 0, 0, 0, 0, wolfImage
 ];
 
 onMounted(async () => {
@@ -86,10 +92,10 @@ const endMove = () => {
         <img style="display: none"  width="60" height="60" src="@/assets/img/cube/wolf.png"/>
         <img style="display: none"  width="60" height="60" src="@/assets/img/cube/sheep.png"/>
         <div class="cube red-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`/src/assets/img/cube/${redCubeList[props.game.redCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`${redCubeList[props.game.redCubeNumber]}`"/>
         </div>
         <div class="cube blue-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`/src/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`${blueCubeList[props.game.blueCubeNumber]}`"/>
         </div>
       </div>
       <div v-if="!winner && playing.id === playerId" class="controls">
