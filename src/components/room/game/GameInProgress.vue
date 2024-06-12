@@ -78,11 +78,18 @@ const endMove = () => {
   <div class="cubes">
     <div>
       <div class="cubes-list">
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/rabbit.png`"/>
+        <img style="display: none"  width="60" height="60" :src="`@/assets/img/cube/fox.png`"/>
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/horse.png`"/>
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/pig.png`"/>
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/cow.png`"/>
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/wolf.png`"/>
+        <img style="display: none" width="60" height="60" :src="`@/assets/img/cube/sheep.png`"/>
         <div class="cube red-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`@/assets/img/cube/${redCubeList[props.game.redCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`/assets/img/cube/${redCubeList[props.game.redCubeNumber]}.png`"/>
         </div>
         <div class="cube blue-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`@/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
         </div>
       </div>
       <div v-if="!winner && playing.id === playerId" class="controls">
