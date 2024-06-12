@@ -79,10 +79,10 @@ const endMove = () => {
     <div>
       <div class="cubes-list">
         <div class="cube red-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`/src/assets/img/cube/${redCubeList[props.game.redCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`@/assets/img/cube/${redCubeList[props.game.redCubeNumber]}.png`"/>
         </div>
         <div class="cube blue-cube rotatable" :class="{ 'rotate': state.isRotating }">
-          <img width="60" height="60" :src="`/src/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
+          <img width="60" height="60" :src="`@/assets/img/cube/${blueCubeList[props.game.blueCubeNumber]}.png`"/>
         </div>
       </div>
       <div v-if="!winner && playing.id === playerId" class="controls">
