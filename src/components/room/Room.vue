@@ -113,7 +113,7 @@ const handleBeforeUnload = () => {
 <template>
   <div class="room">
     <div class="room__content">
-      <Sidebar class="room__sidebar" :players="state.players"/>
+      <Sidebar class="room__sidebar" :players="state.players" :room-id="roomId"/>
       <Game class="room__game" :game="state.game" :room-id="roomId" :host-id="state.hostId" :players="state.players"/>
     </div>
   </div>

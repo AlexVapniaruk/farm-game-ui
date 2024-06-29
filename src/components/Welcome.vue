@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import CreateRoom from "@/components/create-room/CreateRoom.vue";
 </script>
 

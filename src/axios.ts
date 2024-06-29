@@ -2,8 +2,8 @@ import axios from 'axios';
 
 let BASE_URL;
 //BASE_URL = import.meta.env.API_BASE_URL;
-BASE_URL = 'https://farm-game-server-ff82e5096013.herokuapp.com/api/';
-//BASE_URL = 'http://localhost:3000';
+//BASE_URL = 'https://farm-game-server-ff82e5096013.herokuapp.com/api/';
+BASE_URL = 'http://localhost:3000/api/';
 // Create Axios instance after fetching environment variables
 const instance = axios.create({
     //@ts-ignore
